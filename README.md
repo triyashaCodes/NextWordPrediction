@@ -164,13 +164,14 @@ class AttentionLayer(nn.Module):
 - More stable training compared to multiplicative attention
 - Allows model to focus on relevant parts of input sequence
 - Effective for next-word prediction where context matters
+- Instead of considering only the final hidden layer output, we consider the LSTM output at each timestep into a space where the model can learn which parts (timesteps) are important by scoring them differently. This is the Bahdanau attention on LSTM outputs.
+
 
 **BiLSTM Advantages:**
 - Captures bidirectional context (past and future information)
 - Better understanding of word dependencies in both directions
 - Improved performance on language modeling tasks
 - Combines forward and backward LSTM outputs for richer representations
-- Instead of considering only the final hidden layer output, we consider the LSTM output at each timestep into a space where the model can learn which parts (timesteps) are important by scoring them differently. This is the Bahdanau attention on LSTM outputs.
 
 ## Experimentations
 
