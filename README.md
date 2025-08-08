@@ -256,28 +256,15 @@ All models provide comprehensive evaluation including:
 - **Loss**: Cross-entropy loss on test data
 - **Text Generation**: Sample predictions and generated text
 
-### Model Comparison
 
-| Model | Framework | Accuracy | Perplexity | Parameters |
-|-------|-----------|----------|------------|------------|
-| PyTorch LSTM + Attention | PyTorch | 14.29% | 13.66 | 2.7M |
-| BiLSTM + Attention | TensorFlow | 42.52% | 13.66 | ~2M |
-| Basic LSTM | TensorFlow | Baseline | Baseline | ~1M |
 
 ### Key Findings from Experimentations
 
 1. **Vocabulary Size Impact**: Models trained with different vocabulary sizes show performance variations
-2. **Framework Differences**: PyTorch offers better control, TensorFlow provides better performance for this specific task
+2. **Framework Differences**: PyTorch offers better control, TensorFlow provides better performance for this specific task. This was very weird behaviour.
 3. **Attention Effectiveness**: Attention mechanisms significantly improve context understanding
 4. **Regularization Importance**: Dropout and normalization crucial for small datasets
 5. **Model Loading Robustness**: Automatic vocabulary size handling prevents loading errors
-
-#### Regularization Techniques
-1. **Dropout (0.3)**: Prevents overfitting by randomly zeroing activations
-2. **Layer Normalization**: Stabilizes training and improves convergence
-3. **Gradient Clipping**: Prevents exploding gradients
-4. **Label Smoothing (0.1)**: Improves generalization
-5. **Early Stopping**: Prevents overfitting by monitoring validation loss
 
 ### Corpus Size Justification
 The Sherlock Holmes corpus contains only 102,069 words, which is extremely small for deep learning language models. All the research showing 80% accuracy has been on data which were on far bigger files.
@@ -307,24 +294,8 @@ This architecture allows the model to:
 ## Final Metrics
 
 ### PyTorch LSTM + Attention Model
-- **Test Accuracy**: 14.29%
-- **Test Perplexity**: 13.66
-- **Test Loss**: 5.37
-- **Vocabulary Size**: 12,715 words
-- **Model Parameters**: 2,724,043
-
-### TensorFlow BiLSTM + Attention Model
-- **Test Accuracy**: 42.52%
-- **Test Perplexity**: 13.66
-- **Vocabulary Size**: 8,922 words
-- **Model Parameters**: ~2M
-- **Architecture**: Bidirectional LSTM with Query-Key-Value attention
-- **Key Features**: 
-  - Bidirectional context processing
-  - Separate Query, Key, Value LSTM layers
-  - Attention mechanism on LSTM outputs
-  - Concatenation of attention and BiLSTM outputs
-
+- **Test Accuracy**: ~29%
+- **Test Perplexity**: 82.58
 
 ## Generated Examples
 
