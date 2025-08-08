@@ -120,7 +120,7 @@ class LSTMAttentionModel(nn.Module):
         self.fc = nn.Linear(lstm_units, vocab_size)
 ```
 
-#### TensorFlow BiLSTM + Attention Architecture
+#### TensorFlow BiLSTM + Attention Architecture ( I tried to replicate it from the paper: https://bctjournal.com/article_405.html, but they had a mugh larger corpus. Our runs showed very high perplexity)
 ```python
 def build_attention_bilstm_model(total_words, max_seq_len, embedding_dim=100, lstm_units=100):
     input_layer = Input(shape=(max_seq_len - 1,), name="Input_Sequence")
