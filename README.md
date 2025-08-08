@@ -7,10 +7,8 @@ This project implements a next-word prediction model using LSTM with attention m
 ```
 next_word/
 ├── pytorch_lstm_attention.py          # Main PyTorch LSTM + Attention model
-├── evaluate_pytorch_model.py          # Model evaluation script
 ├── basic_lstm_model.py               # Basic LSTM model (TensorFlow)
 ├── bilstm_paper.py                   # BiLSTM + Attention model (TensorFlow)
-├── evaluate_bilstm_model.py          # BiLSTM evaluation script
 ├── data_download_and_analysis.py     # Data preprocessing and analysis
 ├── sherlock_holmes_cleaned.txt       # Cleaned dataset
 ├── sherlock_holmes_gutenberg.txt     # Raw dataset
@@ -73,22 +71,25 @@ python basic_lstm_model.py
 python bilstm_paper.py
 ```
 
-### Evaluation
-```bash
-# Evaluate PyTorch model
-python evaluate_pytorch_model.py
-
-# Evaluate BiLSTM model
-python evaluate_bilstm_model.py
-
-# Interactive text generation
-python evaluate_pytorch_model.py interactive
-```
-
 ### Data Analysis
 ```bash
 # Download and analyze dataset
 python data_download_and_analysis.py
+```
+
+### Model Training and Evaluation
+For detailed information on how the models were trained and how to load and evaluate them, see the **Experimentations** section below. The training scripts include built-in evaluation capabilities and model loading functions.
+
+**Quick Training Commands:**
+```bash
+# Train PyTorch LSTM + Attention model (includes evaluation)
+python pytorch_lstm_attention.py
+
+# Train Basic LSTM model (TensorFlow)
+python basic_lstm_model.py
+
+# Train BiLSTM + Attention model (TensorFlow)
+python bilstm_paper.py
 ```
 
 ## Approach and Architecture
@@ -170,6 +171,105 @@ class AttentionLayer(nn.Module):
 - Improved performance on language modeling tasks
 - Combines forward and backward LSTM outputs for richer representations
 - Instead of considering only the final hidden layer output, we consider the LSTM output at each timestep into a space where the model can learn which parts (timesteps) are important by scoring them differently. This is the Bahdanau attention on LSTM outputs.
+
+## Experimentations
+
+### Training Process and Model Loading
+
+The training scripts include comprehensive evaluation capabilities and model loading functions. Here's how to work with the trained models:
+
+#### PyTorch LSTM + Attention Model
+
+**Training with Evaluation:**
+```bash
+python pytorch_lstm_attention.py
+```
+
+**Key Features:**
+- **Built-in Evaluation**: The script automatically evaluates the model on test data
+- **Model Saving**: Trained model is saved as `sherlock_lstm_attention_pytorch.pth`
+- **Text Generation**: Includes interactive text generation capabilities
+- **Vocabulary Handling**: Automatically handles vocabulary size mismatches
+
+**Model Loading and Evaluation:**
+The training script includes functions to load and evaluate saved models:
+- `load_saved_model()`: Loads trained model with vocabulary size handling
+- `evaluate_saved_model()`: Comprehensive evaluation on test data
+- `generate_text()`: Interactive text generation
+
+**Example Usage:**
+```python
+# Load and evaluate model
+from pytorch_lstm_attention import load_saved_model, evaluate_saved_model
+
+# Load model (handles vocabulary size mismatches automatically)
+model, vocab, word2idx, idx2word = load_saved_model("sherlock_lstm_attention_pytorch.pth")
+
+# Evaluate model
+test_acc, test_loss, perplexity = evaluate_saved_model("sherlock_lstm_attention_pytorch.pth")
+```
+
+#### TensorFlow BiLSTM + Attention Model
+
+**Training:**
+```bash
+python bilstm_paper.py
+```
+
+**Key Features:**
+- **Automatic Model Saving**: Saves model as `model_ABiLSTM.keras`
+- **Tokenizer Persistence**: Saves tokenizer as `tokenizer.pickle`
+- **Built-in Evaluation**: Includes evaluation metrics during training
+- **Text Generation**: Provides next-word prediction capabilities
+
+**Model Loading:**
+```python
+import tensorflow as tf
+import pickle
+
+# Load model
+model = tf.keras.models.load_model('model_ABiLSTM.keras')
+
+# Load tokenizer
+with open('tokenizer.pickle', 'rb') as handle:
+    tokenizer = pickle.load(handle)
+```
+
+#### Basic LSTM Model (TensorFlow)
+
+**Training:**
+```bash
+python basic_lstm_model.py
+```
+
+**Features:**
+- Simple LSTM architecture for baseline comparison
+- Automatic model saving and loading
+- Built-in evaluation metrics
+
+### Evaluation Metrics
+
+All models provide comprehensive evaluation including:
+- **Accuracy**: Top-1 prediction accuracy
+- **Perplexity**: Measure of model uncertainty
+- **Loss**: Cross-entropy loss on test data
+- **Text Generation**: Sample predictions and generated text
+
+### Model Comparison
+
+| Model | Framework | Accuracy | Perplexity | Parameters |
+|-------|-----------|----------|------------|------------|
+| PyTorch LSTM + Attention | PyTorch | 14.29% | 13.66 | 2.7M |
+| BiLSTM + Attention | TensorFlow | 42.52% | 13.66 | ~2M |
+| Basic LSTM | TensorFlow | Baseline | Baseline | ~1M |
+
+### Key Findings from Experimentations
+
+1. **Vocabulary Size Impact**: Models trained with different vocabulary sizes show performance variations
+2. **Framework Differences**: PyTorch offers better control, TensorFlow provides better performance for this specific task
+3. **Attention Effectiveness**: Attention mechanisms significantly improve context understanding
+4. **Regularization Importance**: Dropout and normalization crucial for small datasets
+5. **Model Loading Robustness**: Automatic vocabulary size handling prevents loading errors
 
 #### Regularization Techniques
 1. **Dropout (0.3)**: Prevents overfitting by randomly zeroing activations
